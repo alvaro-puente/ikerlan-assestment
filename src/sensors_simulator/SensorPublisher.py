@@ -11,8 +11,9 @@ logging.basicConfig(filename='/sensors_simulator/logs/sensor_publishers.log', le
 
 class SensorPublisher():
 
-    def __init__(self, clientID, brokerAddress, brokerPort):
+    def __init__(self, clientID, brokerAddress, brokerPort, user, password):
         self.client = mqtt.Client()
+        self.client.username_pw_set(user, password)
         self.brokerAddress = brokerAddress
         self.brokerPort = brokerPort
         self.clientID = clientID

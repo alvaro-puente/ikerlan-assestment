@@ -14,6 +14,8 @@ services:
         privileged: false
         # Setup environment variables
         environment:
+            - EDGE_SERVER_USER
+            - EDGE_SERVER_PWD
             - BROKER_ADDRESS
             - AUTH_COOKIE
             - BROKER_PORT
@@ -39,6 +41,8 @@ services:
         privileged: true
         # Setup environment variables
         environment:
+            - SIMULATOR_USER
+            - SIMULATOR_PWD
             - BROKER_ADDRESS
             - AUTH_COOKIE
             - BROKER_PORT

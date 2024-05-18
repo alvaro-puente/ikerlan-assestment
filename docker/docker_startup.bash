@@ -8,6 +8,11 @@ export EDGE_SERVER_IMAGE=edge_server:1.0
 # Broker configuration
 export BROKER_ADDRESS="10.5.0.7"
 export BROKER_PORT="8883"
+# Autentication
+export EDGE_SERVER_USER="edge_server"
+export EDGE_SERVER_PWD="edge_server"
+export SIMULATOR_USER="sensors_simulator"
+export SIMULATOR_PWD="sensors_simulator"
 
 # Initialization variables
 export AUTH_COOKIE=$(xauth list | awk '/MIT-MAGIC-COOKIE-1/ {print $NF; exit}')

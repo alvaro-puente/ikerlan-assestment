@@ -9,10 +9,11 @@ logging.basicConfig(filename='/edge_server/logs/subscribers.log', level=logging.
 
 class MQTTSubscriber():
     
-    def __init__(self, brokerAddress, brokerPort, clientID):
+    def __init__(self, brokerAddress, brokerPort, user, password, clientID):
         # Paralelization of tasks (2 workers per subscriber)
         self.executor = ThreadPoolExecutor(max_workers=2)
         self.client = mqtt.Client()
+        self.client.username_pw_set(user, password)
         self.brokerAddress = brokerAddress
         self.brokerPort = brokerPort
         self.clientID = clientID
