@@ -1,0 +1,11 @@
+FROM eclipse-mosquitto:latest
+
+# Copy configuration and password to config folder
+COPY ./docker/mosquitto_broker/config /mosquitto/config
+COPY ./docker/mosquitto_broker/.keys/passwords.txt /mosquitto/config/passwords.txt
+
+# Expose port 1883
+EXPOSE 1883
+
+# Set up logs folder
+RUN mkdir -p /mosquitto/log && chown mosquitto:mosquitto /mosquitto/log

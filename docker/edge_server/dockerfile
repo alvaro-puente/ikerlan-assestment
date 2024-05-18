@@ -1,0 +1,34 @@
+FROM python:3.9
+
+# Adding alvaro user and ikerlan group ownership for some directories
+RUN groupadd -g 1000 ikerlan \
+    && useradd -s /bin/bash -m alvaro -u 1000 -g 1000 
+
+# Copy dependencies
+COPY ./docker/edge_server/install_scripts /install_scripts
+
+# Install dependencies and python libraries
+RUN chmod +x /install_scripts/. \
+    && /install_scripts/install_basic.sh \
+    && pip install -r /install_scripts/requirements.txt 
+
+# Copy code inside
+COPY ./src/edge_server /edge_server
+
+# Give permissions to alvaro user for the workspace
+RUN mkdir -p /edge_server/logs \
+    && chown -R alvaro /edge_server \
+    && chgrp -R ikerlan /edge_server \
+    && chmod -R 770 /edge_server
+
+# Working directory
+WORKDIR /edge_server
+
+# Switch to alvaro user
+USER alvaro:ikerlan
+
+# Create Xauthority file
+RUN touch ~/.Xauthority
+
+# Define entrypoint
+ENTRYPOINT [ "/entrypoint.sh" ]
