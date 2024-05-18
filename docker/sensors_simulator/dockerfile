@@ -15,7 +15,7 @@ RUN chmod +x /install_scripts/. \
 # Copy code inside
 COPY ./src/sensors_simulator /sensors_simulator
 # Copy entrypoint
-COPY ./src/sensors_simulator/entrypoint.sh /entrypoint.sh
+COPY ./docker/sensors_simulator/entrypoint.sh /entrypoint.sh
 
 # Give permissions to alvaro user for the workspace
 RUN mkdir -p /sensors_simulator/logs \

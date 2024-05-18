@@ -15,7 +15,7 @@ RUN chmod +x /install_scripts/. \
 # Copy code inside
 COPY ./src/edge_server /edge_server
 # Copy entrypoint
-COPY ./src/edge_server/entrypoint.sh /entrypoint.sh
+COPY ./docker/edge_server/entrypoint.sh /entrypoint.sh
 
 # Give permissions to alvaro user for the workspace
 RUN mkdir -p /edge_server/logs \
