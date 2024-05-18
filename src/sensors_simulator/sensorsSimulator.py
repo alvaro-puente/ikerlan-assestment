@@ -13,9 +13,9 @@ if __name__ == "__main__":
     pub1 = SensorPublisher("pub1", BROKER_ADDRESS, BROKER_PORT, USER, PWD)
     pub1.start("sensor_data/temperature")
     print("Publisher 1 sending...")
-    pub2 = SensorPublisher("pub2", BROKER_ADDRESS, BROKER_PORT)
+    pub2 = SensorPublisher("pub2", BROKER_ADDRESS, BROKER_PORT, USER, PWD)
     pub2.start("sensor_data/humidity")
-    print("Publisher 1 sending...")
+    print("Publisher 2 sending...")
     
     try:
         while True:

@@ -3,9 +3,16 @@
 from concurrent.futures import ThreadPoolExecutor
 import paho.mqtt.client as mqtt
 import logging
+import sys
 
 # Configure log file
 logging.basicConfig(filename='/edge_server/logs/subscribers.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Print logs 
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setLevel(logging.INFO)  
+console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logging.getLogger().addHandler(console_handler)
 
 class MQTTSubscriber():
     

@@ -2,10 +2,10 @@
 user admin
 topic #
 
-# sensor_simulator user can only publish to topic "sensors_topic"
+# sensor_simulator user can only publish to topics "sensor_data/humidity" and "sensor_data/temperature" 
 user sensors_simulator
-topic write sensors_topic
+topic write sensor_data/temperature sensor_data/humidity
 
-# edge_server user can only subscribe to topic "sensors_topic"
+# edge_server user can only subscribe to topics "sensor_data/humidity" and "sensor_data/temperature"
 user edge_server
-topic read sensors_topic
+topic read sensor_data/temperature sensor_data/humidity

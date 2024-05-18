@@ -15,7 +15,7 @@ if __name__ == "__main__":
     subs1.connect()
     subs1.subscribe("sensor_data/temperature")
     print("Subscriber 1 listening...")
-    subs2 = MQTTSubscriber(BROKER_ADDRESS, BROKER_PORT, "subs2")
+    subs2 = MQTTSubscriber(BROKER_ADDRESS, BROKER_PORT, USER, PWD, "subs2")
     subs2.connect()
     subs2.subscribe("sensor_data/humidity")
     print("Subscriber 2 listening...")
