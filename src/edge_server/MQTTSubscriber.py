@@ -12,7 +12,7 @@ class MQTTSubscriber():
     def __init__(self, brokerAddress, brokerPort, clientID):
         # Paralelization of tasks (2 workers per subscriber)
         self.executor = ThreadPoolExecutor(max_workers=2)
-        self.client = mqtt.Client(clientID)
+        self.client = mqtt.Client()
         self.brokerAddress = brokerAddress
         self.brokerPort = brokerPort
         self.clientID = clientID
