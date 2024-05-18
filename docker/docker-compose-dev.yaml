@@ -7,7 +7,8 @@ services:
         # Run edge server image
         image: $EDGE_SERVER_IMAGE
         networks:
-            - sensors_network
+            sensors_network:
+                ipv4_address: 10.5.0.5
         # Name for the container
         container_name: edge_server
         # Don't execute container with host privileges
@@ -34,7 +35,8 @@ services:
         # Build with a Dockerfile image
         image: $SENSORS_SIMULATOR_IMAGE
         networks:
-            - sensors_network
+            sensors_network:
+                ipv4_address: 10.5.0.6
         # Name for the container
         container_name: sensors_simulator
         # Don't execute container with host privileges
@@ -61,7 +63,8 @@ services:
         # Build with a Dockerfile image
         image: $MOSQUITTO_BROKER_IMAGE
         networks:
-            - sensors_network
+            sensors_network:
+                ipv4_address: 10.5.0.7
         ports:
             - "8883:8883"
         # Name for the container
@@ -81,7 +84,3 @@ networks:
      config:
        - subnet: 10.5.0.0/16
          gateway: 10.5.0.1
-         aux_addresses:
-          edge_server: 10.5.0.5
-          sensors_simulator: 10.5.0.6
-          broker: 10.5.0.7
