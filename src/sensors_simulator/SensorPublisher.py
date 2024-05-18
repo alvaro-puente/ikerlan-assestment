@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import paho.mqtt.client as mqtt
+from datetime import datetime
 import threading
 import logging
 import random
@@ -39,7 +40,8 @@ class SensorPublisher():
         data = {
             "sensor_id": sensor_id, 
             "sensor_type": sensor_type, 
-            "value": value
+            "value": value,
+            "timestamp": datetime.now()
         }
         return json.dumps(data)
 

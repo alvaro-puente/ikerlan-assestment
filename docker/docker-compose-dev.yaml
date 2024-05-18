@@ -76,6 +76,27 @@ services:
             - '/tmp/.X11-unix:/tmp/.X11-unix'
         # Give interactive shell
         tty: true
+    # Database container
+    sensors_database: 
+        image: mysql:latest
+        networks:
+            sensors_network:
+                ipv4_address: 10.5.0.8
+        # Container name
+        container_name: sensors_database
+        # Environment variables for MySQL
+        environment:
+            - MYSQL_ROOT_PASSWORD=rootpassword
+            - MYSQL_DATABASE=sensors_database
+            - MYSQL_USER=admin
+            - MYSQL_PASSWORD=adminpassword
+        # Map the port to expose the MySQL database
+        ports:
+        - "3306:3306"
+        # Volume to persist MySQL data
+        volumes:
+        - ../src/sensors_database/sql/sensors_data.sql:/docker-entrypoint-initdb.d/sensors_data.sql
+        - ../src/sensors_database/data:/var/lib/mysql
 
 networks:
   sensors_network:
