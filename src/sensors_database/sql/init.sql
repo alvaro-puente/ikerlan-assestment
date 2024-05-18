@@ -9,3 +9,12 @@ CREATE TABLE sensors_data (
   value VARCHAR(100) NOT NULL,
   timestamp DATETIME NOT NULL,
 );
+
+CREATE DATABASE IF NOT EXISTS processed_sensors;
+
+USE processed_sensors;
+
+CREATE TABLE processed_data (
+  id CHAR(36) PRIMARY KEY,
+  value VARCHAR(100) NOT NULL,
+);

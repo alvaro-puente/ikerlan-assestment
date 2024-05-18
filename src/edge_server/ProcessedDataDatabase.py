@@ -19,7 +19,7 @@ class SensorsDataDatabase():
     def connect(self):
         try:
             # Get connection and cursor
-            self.connection = sqlite3.connect('processed_sensors.db', check_same_thread=False)
+            self.connection = sqlite3.connect('/data/processed_sensors.db', check_same_thread=False)
             self.cursor = self.connection.cursor()
             logging.info("Successfully connected to the database.")
         except sqlite3.Error as e:
