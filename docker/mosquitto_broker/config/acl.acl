@@ -1,0 +1,11 @@
+# Allow whole access to admin
+user admin
+topic #
+
+# sensor_simulator user can only publish to topic "sensors_topic"
+user sensors_simulator
+topic write sensors_topic
+
+# edge_server user can only subscribe to topic "sensors_topic"
+user edge_server
+topic read sensors_topic
