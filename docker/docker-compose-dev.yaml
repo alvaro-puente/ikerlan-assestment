@@ -58,7 +58,7 @@ services:
         networks:
             - sensors_network
         ports:
-            - "1883:1883"
+            - "8883:8883"
         # Name for the container
         container_name: mosquitto_broker
         # Don't execute container with host privileges
