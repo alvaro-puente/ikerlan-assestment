@@ -10,10 +10,10 @@ xauth add "$CONTAINER_HOSTNAME/unix$DISPLAY" MIT-MAGIC-COOKIE-1 "$AUTH_COOKIE"
 if [ "$DEV" = true ]; then
     # Debug terminal
     xterm -hold -T sensor_simulator:Debug -e bash &
-    xterm -hold -T sensor_simulator:publisher -e bash -c 'python3 /sensor_simulator/sensorsSimulator.py' &
+    xterm -hold -T sensor_simulator:publisher -e bash -c 'python3 /sensors_simulator/sensorsSimulator.py' &
 else
     # Launch nodes
-    python3 /sensor_simulator/sensorsSimulator.py &
+    python3 /sensors_simulator/sensorsSimulator.py &
 fi
 
 eval "bash"
