@@ -5,7 +5,7 @@ import logging
 import sys
 
 # Configure log file
-logging.basicConfig(filename='/edge_server/logs/filter.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='/edge_server/logs/processor.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Print logs 
 console_handler = logging.StreamHandler(sys.stdout)
@@ -16,7 +16,7 @@ logging.getLogger().addHandler(console_handler)
 """
 This class provides all the relevant methods to filter data
 """
-class Filter():
+class Processor():
     
     # Outlier filters
     def applyOutliersFilter(data):
@@ -44,4 +44,4 @@ class Filter():
             logging.info("Filtering was done correctly")
             return filteredValuesWithNoNaNVAlues
         except Exception as e:
-            logging.error(f"An error has occurred: {str(e)}")
+            logging.error("An error has occurred when filtering: " + str(e))
