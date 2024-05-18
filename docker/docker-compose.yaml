@@ -1,0 +1,74 @@
+# Docker compose version
+version: '2.4'
+# Section to define the docker images
+services:
+    # Edge server container
+    edge_server:
+        # Run edge server image
+        image: $EDGE_SERVER_IMAGE
+        networks:
+            - sensors_network
+        # Name for the container
+        container_name: edge_server
+        # Don't execute container with host privileges
+        privileged: false
+        # Setup environment variables
+        environment:
+            - BROKER_ADDRESS
+            - AUTH_COOKIE
+            - BROKER_PORT
+            - DISPLAY
+            - DEV
+        volumes:
+            - '/tmp/.X11-unix:/tmp/.X11-unix'
+        # Give interactive shell
+        tty: true
+    # Sensors simulator container
+    sensors_simulator:
+        # Build with a Dockerfile image
+        image: $SENSORS_SIMULATOR_IMAGE
+        networks:
+            - sensors_network
+        # Name for the container
+        container_name: sensors_simulator
+        # Don't execute container with host privileges
+        privileged: true
+        # Setup environment variables
+        environment:
+            - BROKER_ADDRESS
+            - AUTH_COOKIE
+            - BROKER_PORT
+            - DISPLAY
+            - DEV
+        volumes:
+            - '/tmp/.X11-unix:/tmp/.X11-unix'
+        # Give interactive shell
+        tty: true
+    # Mosquitto broker container
+    broker:
+        # Build with a Dockerfile image
+        image: $MOSQUITTO_BROKER_IMAGE
+        networks:
+            - sensors_network
+        ports:
+            - "1883:1883"
+        # Name for the container
+        container_name: mosquitto_broker
+        # Don't execute container with host privileges
+        privileged: false
+        volumes:
+            - '/tmp/.X11-unix:/tmp/.X11-unix'
+        # Give interactive shell
+        tty: true
+
+networks:
+  sensors_network:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
+         aux_addresses:
+          edge_server: 10.5.0.5
+          sensors_simulator: 10.5.0.6
+          broker: 10.5.0.7
