@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import paho.mqtt.client as mqtt
+import threading
 import logging
 import random
 import json
@@ -18,13 +19,18 @@ logging.getLogger().addHandler(console_handler)
 
 class SensorPublisher():
 
-    def __init__(self, clientID, brokerAddress, brokerPort, user, password):
+    def __init__(self, clientID, brokerAddress, brokerPort, user, password, topic):
         self.client = mqtt.Client()
+        self.clientID = clientID
         self.client.username_pw_set(user, password)
         self.brokerAddress = brokerAddress
         self.brokerPort = brokerPort
-        self.clientID = clientID
-        
+        self.topic = topic
+        # Callbacks
+        self.client.on_connect = self.onConnect
+        self.client.on_disconnect = self.onDisconnect
+        self.client.on_publish = self.onPublish
+
     # Generate message to send
     def generateData(self):
         sensor_id = "sensor_" + str(random.randint(1, 10))
@@ -34,33 +40,50 @@ class SensorPublisher():
             "sensor_id": sensor_id, 
             "sensor_type": sensor_type, 
             "value": value
-            }
+        }
         return json.dumps(data)
 
     # Function that sends data to topic
-    def publishData(self, topic):
+    def publishData(self):
         try:
             while True:
                 data = self.generateData()
-                self.client.publish(topic, data)
-                time.sleep(0.1)
+                logging.info(self.clientID + ": publishing data: " + str(data))
+                self.client.publish(self.topic, data)
+                time.sleep(10)
         except Exception as e:
-            logging.error(self.clientID + ": Error publishing data to topic " + topic + ":" + str(e))
+            logging.error(self.clientID + ": Error publishing data to topic " + self.topic + ": " + str(e))
 
-    # Connect to broker and start sending data
-    def start(self, topic):
+    # Connect to broker and start the loop
+    def start(self):
         try:
             self.client.connect(self.brokerAddress, self.brokerPort)
-            logging.info(self.clientID + " connected succesfully!")
-            self.publishData(topic)
+            self.client.loop_start()
         except Exception as e:
-            logging.error(self.clientID + ": Error connecting to broker or publishing data to topic " + topic + ":" + str(e))
+            logging.error(self.clientID + ": Error connecting to broker: " + str(e))
 
     # Close MQTT connection
     def stop(self):
         try:
+            self.client.loop_stop()
             self.client.disconnect()
         except Exception as e:
             logging.error(self.clientID + ": Error disconnecting from broker: " + str(e))
 
+    # Connect callback
+    def onConnect(self, client, userdata, flags, rc):
+        if rc == 0:
+            logging.info(self.clientID + ": connected to broker successfully")
+            # Start publishing data in a separate thread
+            publishThread = threading.Thread(target=self.publishData)
+            publishThread.start()
+        else:
+            logging.error(self.clientID + ": failed to connect to broker with result code " + str(rc))
 
+    # Disconnect callback
+    def onDisconnect(self, client, userdata, rc):
+        logging.info(self.clientID + ": disconnected from broker with result code " + str(rc))
+
+    # Publish callback
+    def onPublish(self, client, userdata, mid):
+        logging.info(self.clientID + ": published message with mid " + str(mid))

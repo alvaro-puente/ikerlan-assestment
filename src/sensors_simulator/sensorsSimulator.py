@@ -10,11 +10,11 @@ if __name__ == "__main__":
     USER = os.getenv("SIMULATOR_USER")
     PWD = os.getenv("SIMULATOR_PWD")
     # Start publishing
-    pub1 = SensorPublisher("pub1", BROKER_ADDRESS, BROKER_PORT, USER, PWD)
-    pub1.start("sensor_data/temperature")
+    pub1 = SensorPublisher("pub1", BROKER_ADDRESS, BROKER_PORT, USER, PWD, "sensor_data/temperature")
+    pub1.start()
     print("Publisher 1 sending...")
-    pub2 = SensorPublisher("pub2", BROKER_ADDRESS, BROKER_PORT, USER, PWD)
-    pub2.start("sensor_data/humidity")
+    pub2 = SensorPublisher("pub2", BROKER_ADDRESS, BROKER_PORT, USER, PWD, "sensor_data/humidity")
+    pub2.start()
     print("Publisher 2 sending...")
     
     try:

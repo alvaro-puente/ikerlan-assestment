@@ -6,7 +6,7 @@ import logging
 import sys
 
 # Configure log file
-logging.basicConfig(filename='/edge_server/logs/subscribers.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='/edge_server/logs/subscribers.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Print logs 
 console_handler = logging.StreamHandler(sys.stdout)
@@ -59,7 +59,7 @@ class MQTTSubscriber():
         except Exception as e:
             logging.error("Error processing message: " + str(e))
 
-    def process_message(self, payload):
+    def processMessage(self, payload):
         # Store message
         print("Process message: " + str(payload))
 
