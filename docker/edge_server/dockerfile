@@ -13,7 +13,7 @@ RUN chmod +x /install_scripts/. \
     && pip install -r /install_scripts/requirements.txt 
 
 # Copy code inside
-COPY ./src/edge_server /edge_server
+COPY ./src/edge_server /edge_server/scripts
 # Copy entrypoint
 COPY ./docker/edge_server/entrypoint.sh /entrypoint.sh
 

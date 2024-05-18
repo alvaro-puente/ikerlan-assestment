@@ -13,7 +13,7 @@ RUN chmod +x /install_scripts/. \
     && pip install -r /install_scripts/requirements.txt 
 
 # Copy code inside
-COPY ./src/sensors_simulator /sensors_simulator
+COPY ./src/sensors_simulator /sensors_simulator/scripts
 # Copy entrypoint
 COPY ./docker/sensors_simulator/entrypoint.sh /entrypoint.sh
 

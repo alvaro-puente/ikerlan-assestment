@@ -10,10 +10,10 @@ xauth add "$CONTAINER_HOSTNAME/unix$DISPLAY" MIT-MAGIC-COOKIE-1 "$AUTH_COOKIE"
 if [ "$DEV" = true ]; then
     # Debug terminal
     xterm -hold -T edge_server:Debug -e bash &
-    xterm -hold -T edge_server:server -e bash -c 'python3 /edge_server/edgeServer.py' &
+    xterm -hold -T edge_server:server -e bash -c 'python3 /edge_server/scripts/edgeServer.py' &
 else
     # Launch nodes
-    python3 /edge_server/edgeServer.py &
+    python3 /edge_server/scripts/edgeServer.py &
 fi
 
 eval "bash"
