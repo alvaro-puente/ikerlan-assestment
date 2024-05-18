@@ -6,7 +6,7 @@ import os
 if __name__ == "__main__":
     # Get broker address and port
     BROKER_ADDRESS = os.getenv("BROKER_ADDRESS")
-    BROKER_PORT= os.getenv("BROKER_PORT")
+    BROKER_PORT= int(os.getenv("BROKER_PORT"))
     USER = os.getenv("SIMULATOR_USER")
     PWD = os.getenv("SIMULATOR_PWD")
     # Start publishing
