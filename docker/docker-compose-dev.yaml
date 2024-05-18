@@ -45,6 +45,7 @@ services:
             - DISPLAY
             - DEV
         volumes:
+            - ../logs/sensors_simulator:/sensors_simulator/logs
             - ../src/sensors_simulator:/sensors_simulator
             - '/tmp/.X11-unix:/tmp/.X11-unix'
         depends_on:

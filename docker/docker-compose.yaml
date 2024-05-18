@@ -20,7 +20,10 @@ services:
             - DISPLAY
             - DEV
         volumes:
+            - ../logs/edge_server:/edge_server/logs
             - '/tmp/.X11-unix:/tmp/.X11-unix'
+        depends_on:
+            - broker
         # Give interactive shell
         tty: true
     # Sensors simulator container
@@ -41,7 +44,10 @@ services:
             - DISPLAY
             - DEV
         volumes:
+            - ../logs/sensors_simulator:/sensors_simulator/logs
             - '/tmp/.X11-unix:/tmp/.X11-unix'
+        depends_on:
+            - broker
         # Give interactive shell
         tty: true
     # Mosquitto broker container
@@ -51,12 +57,13 @@ services:
         networks:
             - sensors_network
         ports:
-            - "1883:1883"
+            - "8883:8883"
         # Name for the container
         container_name: mosquitto_broker
         # Don't execute container with host privileges
         privileged: false
         volumes:
+            -  ../logs/mosquitto_broker:/mosquitto/log
             - '/tmp/.X11-unix:/tmp/.X11-unix'
         # Give interactive shell
         tty: true
