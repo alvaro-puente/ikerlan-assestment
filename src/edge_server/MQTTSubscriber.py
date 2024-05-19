@@ -14,8 +14,6 @@ subscribersLogger = CustomLogger('/edge_server/logs/subscribers.log', "subscribe
 class MQTTSubscriber():
     
     def __init__(self, brokerAddress, brokerPort, user, password, clientID):
-        # Paralelization of tasks (2 workers per subscriber)
-        self.executor = ThreadPoolExecutor(max_workers=2)
         # MQTT Broker information
         self.client = mqtt.Client()
         self.client.username_pw_set(user, password)
@@ -61,7 +59,7 @@ class MQTTSubscriber():
         try:
             subscribersLogger.logger.debug(self.clientID + " received a message " + str(msg.payload))
             message = json.loads(msg.payload)
-            self.executor.submit(self.processMessage, message)
+            self.processMessage(message)
         except Exception as e:
             subscribersLogger.logger.error(self.clientID + ": Error processing message: " + str(e))
 
@@ -70,7 +68,7 @@ class MQTTSubscriber():
         # Store message
         self.storeMessage(message)
         # Check if database reaches more than numberOfEntries
-        numberOfEntries = 10
+        numberOfEntries = 50
         hasNumberEntries = self.sensorsDataDatabase.hasNumberOfEntries(numberOfEntries)
         # If reaches...
         if hasNumberEntries:
@@ -93,9 +91,7 @@ class MQTTSubscriber():
         ids = [row[0] for row in idValuePairs]
         values = [row[1] for row in idValuePairs]
         # Process values and store them in a new database
-        subscribersLogger.logger.debug("Values to be processed: " + str(values))
         processedValues = self.processor.applyOutliersFilter(values)
-        subscribersLogger.logger.debug("Result: " + str(processedValues))
         for value in processedValues:
             id = str(uuid.uuid4())
             self.processedDataDatabase.addEntry(id, value)

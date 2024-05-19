@@ -40,7 +40,7 @@ class SensorsDataDatabase():
             # Count entries
             self.cursor.execute('SELECT COUNT(*) FROM sensors_data')
             count = self.cursor.fetchone()[0]
-            sensLogger.logger.debug("Number of entries in database: " + str(count))
+            sensLogger.logger.info("Number of entries in database: " + str(count))
             return count > numberOfEntries
         except mysql.connector.Error as e:
             sensLogger.logger.error("Error counting entries in database: " + str(e))

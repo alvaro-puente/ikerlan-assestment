@@ -50,9 +50,9 @@ class SensorPublisher():
         try:
             while True:
                 data = self.generateData()
-                logging.info(self.clientID + ": publishing data: " + str(data))
+                logging.debug(self.clientID + ": publishing data: " + str(data))
                 self.client.publish(self.topic, data)
-                time.sleep(10)
+                time.sleep(0.1)
         except Exception as e:
             logging.error(self.clientID + ": Error publishing data to topic " + self.topic + ": " + str(e))
 

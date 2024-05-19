@@ -5,7 +5,7 @@ import sys
 
 class CustomLogger:
 
-    def __init__(self, logFile, id, fileLevel=logging.DEBUG, consoleLevel=logging.DEBUG):
+    def __init__(self, logFile, id, fileLevel=logging.INFO, consoleLevel=logging.INFO):
         self.logger = logging.getLogger(id)
         self.logger.setLevel(logging.DEBUG)
 
