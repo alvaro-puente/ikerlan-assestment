@@ -1,37 +1,35 @@
 #!/usr/bin/env python3
 
-import sqlite3
-import logging
-import sys
+from CustomLogger import CustomLogger
+import mysql.connector
 
-# Configure log file
-logging.basicConfig(filename='/edge_server/logs/processed_sensors.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+procLogger = CustomLogger('/edge_server/logs/processed_database.log', "processed_database")
 
-# Print logs 
-console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setLevel(logging.INFO)  
-console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-logging.getLogger().addHandler(console_handler)
-
-class SensorsDataDatabase():
+class ProcessedDataDatabase():
         
     # Connect to database
     def connect(self):
         try:
-            # Get connection and cursor
-            self.connection = sqlite3.connect('/data/processed_sensors.db', check_same_thread=False)
+            # Connect to MySQL database
+            self.connection = mysql.connector.connect(
+                host='10.5.0.8',
+                port='3306',
+                user='root',
+                password='rootpassword',
+                database='processed_database'
+            )
             self.cursor = self.connection.cursor()
-            logging.info("Successfully connected to the database.")
-        except sqlite3.Error as e:
-            logging.error("Error connecting to database: " + str(e))
+            procLogger.logger.info("Successfully connected to the database.")
+        except mysql.connector.Error as e:
+            procLogger.logger.error("Error connecting to database: " + str(e))
             raise
 
     # Adds a new entry in the table
     def addEntry(self, id, value):
         try:
-            self.cursor.execute('INSERT INTO processed_data (id, value) VALUES (?, ?)', (id, value))
+            self.cursor.execute('INSERT INTO processed_data (id, value) VALUES (%s, %s)', (id, value))
             self.connection.commit()
-            logging.info(f"Entry added: ID={id}, Value={value}")
-        except sqlite3.Error as e:
-            logging.error("Error adding entry to database: " + str(e))
+            procLogger.logger.debug(f"Entry added: ID={id}, Value={value}")
+        except mysql.connector.Error as e:
+            procLogger.logger.error("Error adding entry to database: " + str(e))
             raise

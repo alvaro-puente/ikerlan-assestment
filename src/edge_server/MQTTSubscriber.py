@@ -3,21 +3,13 @@
 from ProcessedDataDatabase import ProcessedDataDatabase
 from SensorsDataDatabase import SensorsDataDatabase
 from concurrent.futures import ThreadPoolExecutor
+from CustomLogger import CustomLogger
 import paho.mqtt.client as mqtt
 from Processor import Processor
-import logging
 import json
 import uuid
-import sys
 
-# Configure log file
-logging.basicConfig(filename='/edge_server/logs/subscribers.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
-# Print logs 
-console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setLevel(logging.INFO)  
-console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-logging.getLogger().addHandler(console_handler)
+subscribersLogger = CustomLogger('/edge_server/logs/subscribers.log', "subscribers")
 
 class MQTTSubscriber():
     
@@ -47,38 +39,38 @@ class MQTTSubscriber():
             self.client.connect(self.brokerAddress, self.brokerPort)
             self.client.loop_start()
         except Exception as e:
-            logging.error(self.clientID + ": Error connecting to broker: " + str(e))
+            subscribersLogger.logger.error(self.clientID + ": Error connecting to broker: " + str(e))
 
     # Subscribe to topic (QoS 0 by default)
     def subscribe(self, topic, qos=0):
         try:
-            logging.info("Subscriber " + self.clientID + " subscribed to " + topic)
+            subscribersLogger.logger.info("Subscriber " + self.clientID + " subscribed to " + topic)
             self.client.subscribe(topic, qos=qos)
         except Exception as e:
-            logging.error(self.clientID + ": Error subscribing to topic " + topic + ": " + str(e))
+            subscribersLogger.logger.error(self.clientID + ": Error subscribing to topic " + topic + ": " + str(e))
 
     # Connect callback
     def onConnect(self, client, userdata, flags, rc):
         if rc == 0:
-            logging.info(self.clientID + " connected to broker successfully")
+            subscribersLogger.logger.info(self.clientID + " connected to broker successfully")
         else:
-            logging.error(self.clientID + " failed to connect to broker with result code " + str(rc))
+            subscribersLogger.logger.error(self.clientID + " failed to connect to broker with result code " + str(rc))
 
     # Message callback
     def onMessage(self, client, userdata, msg):
         try:
-            logging.debug(self.clientID + " received a message " + str(msg.payload))
+            subscribersLogger.logger.debug(self.clientID + " received a message " + str(msg.payload))
             message = json.loads(msg.payload)
             self.executor.submit(self.processMessage, message)
         except Exception as e:
-            logging.error(self.clientID + ": Error processing message: " + str(e))
+            subscribersLogger.logger.error(self.clientID + ": Error processing message: " + str(e))
 
     # Store message in database
     def processMessage(self, message):
         # Store message
         self.storeMessage(message)
         # Check if database reaches more than numberOfEntries
-        numberOfEntries = 500
+        numberOfEntries = 10
         hasNumberEntries = self.sensorsDataDatabase.hasNumberOfEntries(numberOfEntries)
         # If reaches...
         if hasNumberEntries:
@@ -101,7 +93,9 @@ class MQTTSubscriber():
         ids = [row[0] for row in idValuePairs]
         values = [row[1] for row in idValuePairs]
         # Process values and store them in a new database
+        subscribersLogger.logger.debug("Values to be processed: " + str(values))
         processedValues = self.processor.applyOutliersFilter(values)
+        subscribersLogger.logger.debug("Result: " + str(processedValues))
         for value in processedValues:
             id = str(uuid.uuid4())
             self.processedDataDatabase.addEntry(id, value)

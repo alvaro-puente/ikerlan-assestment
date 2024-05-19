@@ -6,6 +6,8 @@ CONTAINER_HOSTNAME=$(cat /etc/hostname)
 # Add authentication entry to the hosts display inside of the container xauth configuration
 xauth add "$CONTAINER_HOSTNAME/unix$DISPLAY" MIT-MAGIC-COOKIE-1 "$AUTH_COOKIE"
 
+sleep 5
+
 # Launch nodes
 if [ "$DEV" = true ]; then
     # Debug terminal

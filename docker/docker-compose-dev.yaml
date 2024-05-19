@@ -23,7 +23,6 @@ services:
             - DISPLAY
             - DEV
         volumes:
-            - ../src/sensors_database/data:/data
             - ../logs/edge_server:/edge_server/logs
             - ../src/edge_server:/edge_server/scripts
             - '/tmp/.X11-unix:/tmp/.X11-unix'
@@ -88,8 +87,6 @@ services:
         # Environment variables for MySQL
         environment:
             - MYSQL_ROOT_PASSWORD=rootpassword
-            - MYSQL_DB1=sensors_database
-            - MYSQL_DB2=processed_sensors
             - MYSQL_USER=admin
             - MYSQL_PASSWORD=adminpassword
         # Map the port to expose the MySQL database
@@ -97,7 +94,7 @@ services:
         - "3306:3306"
         # Volume to persist MySQL data
         volumes:
-        - ../src/sensors_database/sql/init.sql:/docker-entrypoint-initdb.d/sensors_data.sql
+        - ../src/sensors_database/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
         - ../src/sensors_database/data:/var/lib/mysql
 
 networks:

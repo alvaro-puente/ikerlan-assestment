@@ -41,7 +41,7 @@ class SensorPublisher():
             "sensor_id": sensor_id, 
             "sensor_type": sensor_type, 
             "value": value,
-            "timestamp": datetime.now()
+            "timestamp": datetime.now().isoformat()
         }
         return json.dumps(data)
 

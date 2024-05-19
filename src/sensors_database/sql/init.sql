@@ -7,14 +7,14 @@ CREATE TABLE sensors_data (
   name VARCHAR(255) NOT NULL,
   type VARCHAR(100) NOT NULL,
   value VARCHAR(100) NOT NULL,
-  timestamp DATETIME NOT NULL,
+  timestamp DATETIME NOT NULL
 );
 
-CREATE DATABASE IF NOT EXISTS processed_sensors;
+CREATE DATABASE IF NOT EXISTS processed_database;
 
-USE processed_sensors;
+USE processed_database;
 
 CREATE TABLE processed_data (
   id CHAR(36) PRIMARY KEY,
-  value VARCHAR(100) NOT NULL,
+  value VARCHAR(100) NOT NULL
 );
