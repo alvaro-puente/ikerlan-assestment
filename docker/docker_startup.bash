@@ -40,6 +40,10 @@ do
       # Docker compose for developemt environment
       file="./docker/docker-compose-dev.yaml"
      ;; 
+   "--build")
+      # Build all images
+      bash ./docker/docker_build.bash --all
+     ;; 
   esac
 done
 
