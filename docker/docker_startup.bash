@@ -18,6 +18,13 @@ export SIMULATOR_PWD="sensors_simulator"
 export AUTH_COOKIE=$(xauth list | awk '/MIT-MAGIC-COOKIE-1/ {print $NF; exit}')
 export DEV=false
 
+# Create logs filesystem
+mkdir -p ./logs/edge_server \
+    && mkdir -p ./logs/mosquitto_broker/ \
+    && mkdir -p ./logs/sensors_simulator \
+    && touch ./logs/mosquitto_broker/mosquitto.log \
+    && chmod -R 777 ./logs
+
 # Stop images if they were up
 bash ./docker/docker_stop.bash
 

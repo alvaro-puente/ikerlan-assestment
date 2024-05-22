@@ -21,7 +21,7 @@ COPY ./docker/edge_server/entrypoint.sh /entrypoint.sh
 RUN mkdir -p /edge_server/logs \
     && chown -R alvaro /edge_server \
     && chgrp -R ikerlan /edge_server \
-    && chmod -R 770 /edge_server
+    && chmod -R 777 /edge_server
 
 # Working directory
 WORKDIR /edge_server

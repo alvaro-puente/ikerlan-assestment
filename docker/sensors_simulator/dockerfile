@@ -21,7 +21,7 @@ COPY ./docker/sensors_simulator/entrypoint.sh /entrypoint.sh
 RUN mkdir -p /sensors_simulator/logs \
     && chown -R alvaro /sensors_simulator \
     && chgrp -R ikerlan /sensors_simulator \
-    && chmod -R 770 /sensors_simulator
+    && chmod -R 777 /sensors_simulator
 
 # Working directory
 WORKDIR /sensors_simulator

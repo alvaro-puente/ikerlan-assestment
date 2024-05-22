@@ -9,5 +9,6 @@ EXPOSE 8883
 
 # Set up logs folder
 RUN mkdir -p /mosquitto/log \
+    && touch /mosquitto/log/mosquitto.log \
     && chown mosquitto:mosquitto /mosquitto/log \
     && chmod 777 -R /mosquitto/log
